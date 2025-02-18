@@ -37,25 +37,25 @@ env:
 # This is done so that we avoid parallelizing the scheduled tests, to leave available
 # runners for the push CI that is running on the same machine.
 jobs:
-  check_runner_status:
-    name: Check Runner Status
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Checkout transformers
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 2
+  #check_runner_status:
+  #  name: Check Runner Status
+  #  runs-on: ubuntu-22.04
+  #  steps:
+  #    - name: Checkout transformers
+  #      uses: actions/checkout@v4
+  #      with:
+  #        fetch-depth: 2
 
-      - name: Check Runner Status
-        run: python utils/check_self_hosted_runner.py --target_runners mi250,hf-amd-mi210-ci-1gpu-1,hf-amd-mi250-ci-1gpu-1,hf-amd-mi300-ci-1gpu-1 --token ${{ secrets.ACCESS_REPO_INFO_TOKEN }}
+  #    - name: Check Runner Status
+  #      run: python utils/check_self_hosted_runner.py --target_runners mi250,hf-amd-mi210-ci-1gpu-1,hf-amd-mi250-ci-1gpu-1,hf-amd-mi300-ci-1gpu-1 --token ${{ secrets.ACCESS_REPO_INFO_TOKEN }}
 
   check_runners:
     name: Check Runners
-    needs: check_runner_status
+  #  needs: check_runner_status
     strategy:
       matrix:
         machine_type: [single-gpu, multi-gpu]
-    runs-on:
+    runs-on: | 
       [
         "${{ matrix.machine_type }}",
         self-hosted,
@@ -84,7 +84,7 @@ jobs:
     strategy:
       matrix:
         machine_type: [single-gpu, multi-gpu]
-    runs-on:
+    runs-on: |
       [
         "${{ matrix.machine_type }}",
         self-hosted,
@@ -162,7 +162,7 @@ jobs:
       fail-fast: false
       matrix:
         machine_type: [single-gpu, multi-gpu]
-    runs-on:
+    runs-on: |
       [
         "${{ matrix.machine_type }}",
         self-hosted,
@@ -224,7 +224,7 @@ jobs:
       fail-fast: false
       matrix:
         machine_type: [single-gpu]
-    runs-on:
+    runs-on: |
       [
         "${{ matrix.machine_type }}",
         self-hosted,
@@ -288,7 +288,7 @@ jobs:
       fail-fast: false
       matrix:
         machine_type: [single-gpu, multi-gpu]
-    runs-on:
+    runs-on: |
       [
         "${{ matrix.machine_type }}",
         self-hosted,
@@ -342,28 +342,28 @@ jobs:
           name: ${{ matrix.machine_type }}_run_torch_cuda_extensions_gpu_test_reports
           path: /transformers/reports/${{ matrix.machine_type }}_run_torch_cuda_extensions_gpu_test_reports
 
-  send_results:
-    name: Slack Report
-    needs:
-      [
-        check_runner_status,
-        check_runners,
-        setup,
-        run_models_gpu,
-        run_pipelines_torch_gpu,
-        run_examples_gpu,
-        run_torch_cuda_extensions_gpu,
-      ]
-    if: ${{ always() }}
-    uses: huggingface/transformers/.github/workflows/slack-report.yml@main
-    with:
-      job: ${{ inputs.job }}
-      # This would be `skipped` if `setup` is skipped.
-      setup_status: ${{ needs.setup.result }}
-      slack_report_channel: ${{ inputs.slack_report_channel }}
-      # This would be an empty string if `setup` is skipped.
-      folder_slices: ${{ needs.setup.outputs.folder_slices }}
-      quantization_matrix: ${{ needs.setup.outputs.quantization_matrix }}
-      ci_event: ${{ inputs.ci_event }}
+  #send_results:
+  #  name: Slack Report
+  #  needs: 
+  #    [
+  #      #check_runner_status,
+  #      check_runners,
+  #      setup,
+  #      run_models_gpu,
+  #      run_pipelines_torch_gpu,
+  #      run_examples_gpu,
+  #      run_torch_cuda_extensions_gpu,
+  #    ]
+  #  if: ${{ always() }}
+  #  uses: huggingface/transformers/.github/workflows/slack-report.yml@main
+  #  with:
+  #    job: ${{ inputs.job }}
+  #    # This would be `skipped` if `setup` is skipped.
+  #    setup_status: ${{ needs.setup.result }}
+  #    slack_report_channel: ${{ inputs.slack_report_channel }}
+  #    # This would be an empty string if `setup` is skipped.
+  #    folder_slices: ${{ needs.setup.outputs.folder_slices }}
+  #    quantization_matrix: ${{ needs.setup.outputs.quantization_matrix }}
+  #    ci_event: ${{ inputs.ci_event }}
 
-    secrets: inherit
+  #  secrets: inherit
