@@ -52,9 +52,9 @@ jobs:
   check_runners:
     name: Check Runners
   #  needs: check_runner_status
-    strategy:
-      matrix:
-        machine_type: [single-gpu, multi-gpu]
+  #  strategy:
+  #    matrix:
+  #      machine_type: [single-gpu, multi-gpu]
     runs-on: ${{ inputs.runner }},
     container:
       image: huggingface/transformers-pytorch-amd-gpu
