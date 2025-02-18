@@ -55,13 +55,7 @@ jobs:
     strategy:
       matrix:
         machine_type: [single-gpu, multi-gpu]
-    runs-on: | 
-      [
-        "${{ matrix.machine_type }}",
-        self-hosted,
-        amd-gpu,
-        "${{ inputs.runner }}",
-      ]
+    runs-on: ${{ inputs.runner }},
     container:
       image: huggingface/transformers-pytorch-amd-gpu
       options: --device /dev/kfd --device /dev/dri --env ROCR_VISIBLE_DEVICES --env HIP_VISIBLE_DEVICES --env HIP_VISIBLE_DEVICES --shm-size "16gb" --ipc host -v /mnt/cache/.cache/huggingface:/mnt/cache/
