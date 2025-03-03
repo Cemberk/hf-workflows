@@ -88,7 +88,7 @@ jobs:
     steps:
       - name: Update clone
         working-directory: /transformers
-        run: git fetch && git checkout ${{ github.sha }}
+        run: git fetch && git checkout main #${{ github.sha }}
 
       - name: Cleanup
         working-directory: /transformers
