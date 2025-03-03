@@ -127,12 +127,12 @@ jobs:
     if: ${{ inputs.job == 'run_models_gpu' }}
     name: Single GPU tests
     needs: setup
-    #strategy:
-    #  max-parallel: 1 # For now, not to parallelize. Can change later if it works well.
-    #  fail-fast: false
-    #  matrix:
-    #    machine_type: [single-gpu, multi-gpu]
-    #    slice_id: ${{ fromJSON(needs.setup.outputs.slice_ids) }}
+    strategy:
+      max-parallel: 1 # For now, not to parallelize. Can change later if it works well.
+      fail-fast: false
+      matrix:
+        machine_type: [single-gpu, multi-gpu]
+        slice_id: ${{ fromJSON(needs.setup.outputs.slice_ids) }}
     uses: ./.github/workflows/transformers_amd_model_jobs.yaml
     with:
       folder_slices: ${{ needs.setup.outputs.folder_slices }}
@@ -146,10 +146,10 @@ jobs:
     if: ${{ inputs.job == 'run_pipelines_torch_gpu' }}
     name: PyTorch pipelines
     needs: check_runners
-    #strategy:
-    #  fail-fast: false
-    #  matrix:
-    #    machine_type: [single-gpu, multi-gpu]
+    strategy:
+      fail-fast: false
+      matrix:
+        machine_type: [single-gpu, multi-gpu]
     runs-on: ${{ inputs.runner }}
     container:
       image: ${{ inputs.docker }}
@@ -202,10 +202,10 @@ jobs:
     if: ${{ inputs.job == 'run_examples_gpu' }}
     name: Examples directory
     needs: check_runners
-    #strategy:
-    #  fail-fast: false
-    #  matrix:
-    #    machine_type: [single-gpu]
+    strategy:
+      fail-fast: false
+      matrix:
+        machine_type: [single-gpu]
     runs-on: ${{ inputs.runner }}
     container:
       image: ${{ inputs.docker }}
@@ -260,10 +260,10 @@ jobs:
     if: ${{ inputs.job == 'run_torch_cuda_extensions_gpu' }}
     name: Torch ROCm deepspeed tests
     needs: check_runners
-    #strategy:
-    #  fail-fast: false
-    #  matrix:
-    #    machine_type: [single-gpu, multi-gpu]
+    strategy:
+      fail-fast: false
+      matrix:
+        machine_type: [single-gpu, multi-gpu]
     runs-on: ${{ inputs.runner }}
     container:
       image: ${{ inputs.docker }}
